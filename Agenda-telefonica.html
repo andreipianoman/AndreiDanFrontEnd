@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        h1 {
+            font-size: 40px;
+            text-align: center;
+        }
+        #firstChunk {
+            background-color: yellow;
+            width: 50%;
+            margin: auto;
+            padding: 5px;
+            border-radius:31px;
+        }
+        #add{
+            margin: auto;
+        }
+        #inputs{
+            text-align: center;
+        }
+        #secondChunk{
+            margin: auto;
+            width:50%;
+            background-color:yellow;
+            padding: 5px;
+            border-radius:31px;
+        }
+        #table{
+            margin:auto;
+            width:100%;
+        }
+        #cell{
+            width:25%;
+        }
+        .blueunderline{
+            color: blue;
+            text-decoration: underline;
+        }
+        .inCell{
+            margin:auto;
+        }
+    </style>
+    <script>
+        contacts =[
+            
+        ]
+
+        indexEditare = -1;
+        function desenestePorcarii() {
+            var tablecontents="";
+            for (var i=0; i<contacts.length; i++){
+                tablecontents += `<tr>
+                <td><span class ="inCell">${contacts[i].nume}</span></td>
+                <td><span class ="inCell">${contacts[i].telefon}</span></td>
+                <td><span class="blueunderline inCell" onclick="modify(${i})">modifica<span></td>
+                <td><span class="blueunderline inCell" onclick="remove(${i})">sterge<span></td>
+                </tr>`;
+            }
+            document.getElementById("table").innerHTML = tablecontents;
+        }
+
+        function adaugaContact() {
+            var entry = {};
+            var name = document.getElementById("n").value;
+            var tel = document.getElementById("tel").value;
+            entry['nume'] = name;
+            entry['telefon'] = tel;
+            if (indexEditare === -1) {
+                contacts.push(entry);
+            } else {
+                contacts.splice(indexEditare, 1, entry);
+                indexEditare =-1;
+            }
+            desenestePorcarii();
+        }
+
+        function remove(idx) {
+            console.log(idx);
+            console.log(contacts);
+            contacts.splice(idx, 1);
+            console.log(contacts);
+            desenestePorcarii();
+        }
+
+        function modify(idx) {
+            indexEditare = idx;
+            var inputs = document.querySelectorAll('#inputs input[name]');
+            console.log(inputs)
+            var contact = contacts[idx];
+            for (var i = 0; i < inputs.length; i++) {
+				var k = inputs[i].getAttribute('name');
+                console.log(k);
+				inputs[i].value = contact[k];
+				var v = inputs[i].value;
+                console.log(v);
+			}
+            desenestePorcarii();
+        }
+    </script>
+</head>
+<body>
+    <div id="firstChunk">
+        <h1>Agenda</h1>
+        <p id="inputs">
+                <span>Nume:</span>
+                <input type="text" id="n" name="nume">
+                <span>Telefon:</span>
+                <input type="text "id="tel" name="telefon"><br>
+            <br>
+            <button id="add" onclick="adaugaContact()">ADAUGA CONTACT</button>
+        </p>
+    </div>
+    <br>
+    <div id="secondChunk">
+        <table border="1" id="table">
+            <tr>
+                <td id="cell"><strong class="inCell">Nume</strong></td>
+                <td id="cell"><strong class="inCell">telefon</strong></td>
+                <td id="cell"></td>
+                <td id="cell"></td>
+            </tr>
+        </table>
+        
+    </div>
+</body>
+</html>

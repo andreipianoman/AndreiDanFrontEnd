@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+    html {
+        background-color: blueviolet;
+    }
+    #content {
+        background-color: aliceblue;
+        width: 60%;
+        margin:auto;
+        border-radius: 25px;
+    }
+    h1 {
+        text-align: center;
+    }
+    #inputs {
+        text-align: center;
+    }
+    #buttons {
+        text-align: center;
+    }
+    table {
+        width: 40%;
+        margin:auto;
+    }
+    .cell {
+        width: 50%;
+        text-align: center;
+    }
+    .cut {
+        text-decoration: line-through;
+    }
+    </style>
+    <script>
+        var shoppingList = [
+            {
+                name:"item"
+            }
+        ]
+
+        function sortAsc(coloana, event){
+            event.preventDefault();
+			shoppingList.sort(function (a,b){
+				if(a[coloana]>b[coloana]){
+					return 1;
+				}
+				if(a[coloana]<b[coloana]){
+					return -1;
+				}
+				return 0;
+			});
+			console.log(shoppingList);
+			drawList();
+		}
+
+        function sortDesk(coloana, event){
+            event.preventDefault();
+			shoppingList.sort(function (a,b){
+				if(a[coloana]<b[coloana]){
+					return 1;
+				}
+				if(a[coloana]>b[coloana]){
+					return -1;
+				}
+				return 0;
+			});
+			console.log(shoppingList);
+			drawList();
+		}
+
+        function addItem() {
+            var entry = {};
+            var item = document.getElementById("item").value;
+            entry['name'] = item;
+            shoppingList.push(entry);
+            drawList();
+        }
+
+        function drawList() {
+            hastemele = "";
+            for (var i=0; i<shoppingList.length; i++) {
+                hastemele += `<tr>
+                <td class="cell"><span id="${String(i)}">${shoppingList[i].name}</span></td>
+                <td class="cell"><button onclick="markAsBought(${String(i)})">Mark as Bought</button></td>
+                </tr>`;
+            }
+            document.getElementById("shoppingList").innerHTML = hastemele;
+        }
+
+        function markAsBought(i) {
+            document.getElementById(i).classList.add("cut");
+        }
+    </script>
+</head>
+<body onload="drawList()">
+    <div id="content">
+        <form>
+            <h1>SHOPPING LIST</h1>
+            <p id="inputs">
+                <input id="item" type="text" placeholder="nume">
+                <input type="button" value="Add Item" onclick="addItem()">
+            </p>
+            <p id="buttons">
+                <button onclick="sortAsc('name', event)">Sort Asc</button>
+                <button onclick="sortDesk('name', event)">Sort Desc</button>
+            </p><br>
+        </form>
+        <table border="1">
+            <thead>
+                <tr>
+                    <td class="cell"><span>Item Description</span></td>
+                    <td class="cell"><span>Action</span></td>
+                </tr>
+            </thead>
+            <tbody id="shoppingList">
+
+            </tbody>
+        </table>
+        <br>
+    </div>
+</body>
+</html>
