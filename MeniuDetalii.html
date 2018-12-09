@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script>
+        var target = location.search.substring(4);
+        console.log(target);
+        var details;
+
+        function getHaleala() {
+                var xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function() {
+                    if (this.readyState === 4 && this.status === 200) {
+                        details = JSON.parse(this.responseText);
+                        deseneazaDetalii();
+                    }
+                }
+
+                xhttp.open("GET", `https://meniuhaleala.firebaseio.com/${target}.json`, true);
+                xhttp.send();
+            }
+
+
+
+            function deseneazaDetalii() {
+                var goala = "";
+                goala += `<img src="${details.imagine}" height="577px" width="581px"><br>
+                <strong><p>${details.nume}</p></strong>
+                <p>${details.ingrediente}</p>
+                <p>${details.reteta}</p>`;
+                document.getElementById("detalii").innerHTML = goala;
+            }
+    </script>
+    <style>
+        table {
+            width: 100%;
+        }
+    </style>
+</head>
+<body onload="getHaleala()">
+    <table>
+        <tr>
+            <td width="80%"><h1>Cald si Rau</h1></td>
+            <td><a href="MeniuContact.html"><button>Contact</button></a></td>
+            <td><a href="MeniuHaleala.html"><button>Meniu</button></a></td>
+        </tr>
+    </table>
+    <div id="detalii"></div>
+</body>
+</html>

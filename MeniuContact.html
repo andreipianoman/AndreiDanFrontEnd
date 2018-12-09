@@ -1,0 +1,47 @@
+<!--AIzaSyDKFWcPkWEohEFalGkC7pRMcC9hBNbU2Ng-->
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        }
+
+        div{
+        }
+
+        #googleMap {
+            height: 750px;
+            width: 75%;
+        }
+    </style>
+    
+    <script>
+        function myMap() {
+        var mapProp= {
+            center:new google.maps.LatLng(51.508742,-0.120850),
+            zoom:5,
+        };
+        var map=new google.maps.Map(document.getElementById("googleMap"),mapProp);
+        }
+        console.log(map);
+    </script>
+            
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDKFWcPkWEohEFalGkC7pRMcC9hBNbU2Ng&callback=myMap"></script>
+</head>
+<body onload="myMap()">
+    <table>
+        <tr>
+            <td><h1>Cald si Bun</h1></td>
+            <td><a href="MeniuHaleala.html"><button>Meniu</button></a></td>
+        </tr>
+    </table>
+        
+
+    <div id="googleMap">
+        <p>guyfcytc</p>
+    </div>
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script>
+      var menu = [];
+
+      function getHaleala() {
+                var xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function() {
+                    if (this.readyState === 4 && this.status === 200) {
+                        menu = JSON.parse(this.responseText);
+                        deseneazaMeniu();
+                    }
+                }
+
+                xhttp.open("GET", "https://meniuhaleala.firebaseio.com/.json", true);
+                xhttp.send();
+            }
+
+      function deseneazaMeniu() {
+          var meniu = "";
+          var search = document.getElementById("search").value;
+          for (var i=0; i<menu.length; i++) {
+              if (menu[i].ingrediente.indexOf(search) !== -1) {
+                  meniu += `<tr>
+                              <td><img height="150px" width="151px" src="${menu[i].imagine}"></td>
+                              <td><span>${menu[i].nume}</span><p>${menu[i].ingrediente}</p></td>
+                              <td><a href="MeniuDetalii.html?id=${i}"><button>Detalii</button></a></td>
+                          </tr>`;
+              }
+          }
+          document.querySelector("tbody").innerHTML = meniu;
+      }
+    </script>
+</head>
+<body onload="getHaleala()">
+    <table border="1" cellspacing="0">
+        <thead>
+            <tr>
+                <td colspan="4"><h1>Cald si bun</h1><a href = "MeniuContact.html"><button>Contact</button></a></td>
+            </tr>
+            <tr>
+                <td colspan="4"><input type = "text" id="search"><button onclick="deseneazaMeniu()">Search</button></td>
+            </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+
+    </table>
+    
+</body>
+</html>
