@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        .day {
+            background-color: blue;
+            padding:2px;
+        }
+        .subPrognosis {
+            display: inline-block;
+            width: 16.5%;
+        }
+        #prognosis {
+            display:flex;
+            flex-direction: row;
+            width: 100%;
+        }
+    </style>
+    <script>
+        var vreme;
+        var prognosis;
+        function loadWeather() {
+            var oras = document.getElementById("oras").value;
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    vreme = JSON.parse(this.responseText);
+                    console.log(vreme);
+                    displayWeather()
+                }
+            };
+            xhttp.open("GET", `https://api.openweathermap.org/data/2.5/weather?appid=69518b1f8f16c35f8705550dc4161056&units=metric&q=${oras}`, true);
+            xhttp.send();
+        }
+
+        function loadPrognosis() {
+            var oras = document.getElementById("oras").value;
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    prognosis = JSON.parse(this.responseText);
+                    console.log(prognosis);
+                    displayPrognosis();
+                }
+            };
+            xhttp.open("GET", `https://api.openweathermap.org/data/2.5/forecast?appid=69518b1f8f16c35f8705550dc4161056&units=metric&q=${oras}`, true);
+            xhttp.send();
+        }
+
+        function displayWeather() {
+            var description = vreme.weather[0].description;
+            var humidity = vreme.main.humidity;
+            var pressure = vreme.main.pressure;
+            var temperatura = vreme.main.temp;
+            var temperatura_min = vreme.main.temp_min;
+            var temperatura_max = vreme.main.temp_max;
+            var lat = vreme.coord.lat;
+            var lung = vreme.coord.lon;
+            var icon = vreme.weather[0].icon;
+            document.getElementById("descriere").innerHTML = description;
+            document.getElementById("umiditatiune").innerHTML = humidity;
+            document.getElementById("preseala").innerHTML = pressure;
+            document.getElementById("incalzeala").innerHTML = temperatura;
+            document.getElementById("incalzeala_min").innerHTML = temperatura_min;
+            document.getElementById("incalzeala_max").innerHTML = temperatura_max;
+            document.getElementById("icon").innerHTML = `<img src=http://openweathermap.org/img/w/${icon}.png>`;
+            document.getElementById("iframe").innerHTML = `<iframe 
+            src="https://www.google.com/maps/embed/v1/place?key=AIzaSyDKFWcPkWEohEFalGkC7pRMcC9hBNbU2Ng
+            &q=${lat},${lung}"></iframe.`
+        }
+
+        function displayPrognosis() {
+            var times = prognosis.list;
+            var day = "";
+            var div_counter = 1;
+            for (var i=0; i<times.length; i++) {
+                string = `<img src=http://openweathermap.org/img/w/${times[i].weather[0].icon}.png><br>
+                <span>Ora: ${times[i].dt_txt.substring(10)}</span><br>
+                <span>Temperatura: ${times[i].main.temp}</span><br>
+                <span>Descriere: ${times[i].weather[0].description}</span><br>`
+
+                var currentDay = times[i].dt_txt.substring(0, 10);
+                if (day === "") {
+                    document.getElementById(`prognosis${div_counter}`).innerHTML += `<span class="day">Ziua: ${currentDay}</span><br>`;
+                    document.getElementById(`prognosis${div_counter}`).innerHTML += string;
+                    day = currentDay;
+                } else if (day !== currentDay) {
+                    console.log(div_counter);
+                    day = currentDay;
+                    div_counter += 1;
+                    document.getElementById(`prognosis${div_counter}`).innerHTML += `<span class="day">Ziua: ${currentDay}</span><br>`;
+                    document.getElementById(`prognosis${div_counter}`).innerHTML += string;
+                } else {
+                    console.log(div_counter);
+                    document.getElementById(`prognosis${div_counter.toString()}`).innerHTML += string;
+                }
+            }
+        }
+    </script>
+</head>
+<body>
+     <div>
+        <input id="oras" type="text">
+        <button onclick="loadWeather()">Afiseste vremea</button>
+        <button onclick="loadPrognosis()">Afiseste prognozu'</button>
+    </div>
+    <br>
+    <div>
+        <h3>Vremea acum</h3>
+        <hr>
+        <img>
+        <br>
+        <span>Descriere: </span><span id="descriere"></span><br>
+        <span>Umiditate: </span><span id="umiditatiune"></span><br>
+        <span>Presiune: </span><span id="preseala"></span><br>
+        <span>Temperatura curenta: </span><span id="incalzeala"></span><br>
+        <span>Minima zilei: </span><span id="incalzeala_min"></span><br>
+        <span>Maxima zilei: </span><span id="incalzeala_max"></span><br>
+        <div id="icon"></div>
+        <div id="iframe"></div>
+    </div>
+    <br>
+    <div>
+        <h3>Vremea in urmatoarele zile</h3>
+        <hr>
+        <div id="prognosis">
+            <div id='prognosis1' class="subPrognosis"></div>
+            <div id='prognosis2' class="subPrognosis"></div>
+            <div id='prognosis3' class="subPrognosis"></div>
+            <div id='prognosis4' class="subPrognosis"></div>
+            <div id='prognosis5' class="subPrognosis"></div>
+            <div id='prognosis6' class="subPrognosis"></div>
+        </div>
+    </div>
+</body>
+</html>
